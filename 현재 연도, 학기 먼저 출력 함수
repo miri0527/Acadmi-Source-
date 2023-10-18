@@ -1,0 +1,21 @@
+//현재 연도 계산
+	private int calculateCurrentYear() {
+		LocalDate currentDate = LocalDate.now();
+		int year = currentDate.getYear();
+		return year;
+	}
+	
+	//현재 학기 계산
+	private int calculateCurrentSemester() {
+		LocalDate currentDate = LocalDate.now();
+		int month = currentDate.getMonthValue();
+		int semester;
+		
+		//1학기인지 2학기인지 판단
+	    if (month >= 3 && month <= 8) {
+	        semester = 1; //3월부터 8월까지는 1학기
+	    } else {
+	    	semester = 2; //9월부터 2월까지는 2학기
+	    }
+	    return semester;
+	}
