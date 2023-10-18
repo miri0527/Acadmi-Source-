@@ -1,0 +1,54 @@
+** Script
+
+// 강의실 배정 
+let xhttpLectureRoom = new XMLHttpRequest();
+xhttpLectureRoom.open('GET', '/administrator/homeLectureRoom');
+
+xhttpLectureRoom.send();
+    
+xhttpLectureRoom.addEventListener('readystatechange', function(){
+    if(this.readyState==4 && this.status==200){
+        document.getElementById("lectureRoom").innerHTML=this.responseText.trim();
+    }
+});
+
+//학생 진행중인 강의 
+let xhttpLecture = new XMLHttpRequest();
+
+xhttpLecture.open('GET', '/student/homeLecture');
+
+xhttpLecture.send();
+    
+xhttpLecture.addEventListener('readystatechange', function(){
+    if(this.readyState==4 && this.status==200){
+        document.getElementById("homeLecture").innerHTML=this.responseText.trim();
+    }
+
+});
+
+
+//공지사항 배정 
+let xhttpNotice = new XMLHttpRequest();
+xhttpNotice.open('GET', '/notice/homeNotice');
+
+xhttpNotice.send();
+    
+xhttpNotice.addEventListener('readystatechange', function(){
+    if(this.readyState==4 && this.status==200){
+        document.getElementById("homeNotice").innerHTML=this.responseText.trim();
+    }
+});
+
+
+//중요 공지사항 배정
+let xhttpImportant = new XMLHttpRequest();
+xhttpImportant.open('GET', '/notice/homeImportant');
+
+xhttpImportant.send();
+    
+xhttpImportant.addEventListener('readystatechange', function(){
+    if(this.readyState==4 && this.status==200){
+        document.getElementById("homeImportant").innerHTML=this.responseText.trim();
+    }
+
+});
