@@ -1,0 +1,82 @@
+** Controller
+
+//강의실 배정
+@GetMapping("homeLectureRoom")
+	public ModelAndView getHomeLectureRoom(Pagination pagination, HttpSession session, AdministratorVO administratorVO) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		
+		Object obj = session.getAttribute("SPRING_SECURITY_CONTEXT");
+		SecurityContextImpl contextImpl = (SecurityContextImpl) obj; 
+		Authentication authentication = contextImpl.getAuthentication();
+		pagination.setUsername(authentication.getName());
+		administratorVO.setUsername(authentication.getName());
+		
+		Integer deptNum =  administratorService.getDeptNumDetail(administratorVO.getUsername());
+		
+		List<LectureVO> ar = null;
+		if(deptNum == 1) {
+			ar = administratorService.getLectureListAll(pagination);
+		}else {
+			ar = administratorService.getLectureList(pagination);
+		}
+		
+		pagination.setPerPage(5L);
+		mv.addObject("list", ar);
+		
+		mv.setViewName("administrator/homeLectureRoom");
+		
+		return mv;
+	}
+
+	//진행중인 강의 리스트
+	@GetMapping("homeLecture")
+	public ModelAndView getCurrentLectureList(HttpSession session, LectureVO lectureVO) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		Object obj = session.getAttribute("SPRING_SECURITY_CONTEXT");
+		SecurityContextImpl contextImpl = (SecurityContextImpl) obj; 
+		Authentication authentication = contextImpl.getAuthentication();
+		lectureVO.setUsername(authentication.getName());
+		List<LectureVO> ar = studentService.getCurrentLectureList(lectureVO);
+		mv.addObject("list", ar);
+		mv.setViewName("student/homeLecture");
+		
+		return mv;
+	}
+
+//홈 공지사항 목록
+	@GetMapping("homeNotice")
+	public ModelAndView getHomeNoticeList(Pagination pagination, HttpSession session) throws Exception{
+		ModelAndView mv = new ModelAndView();
+		pagination.setPerPage(5L);
+		List<BoardVO> ar = noticeService.getList(pagination);
+		
+		mv.addObject("list", ar);
+		mv.setViewName("professor/homeNotice");
+		return mv;
+	}
+	
+	//홈 학생 공지사항 목록
+	@GetMapping("homeStudentNotice")
+	public ModelAndView getNoticeList(Pagination pagination, HttpSession session) throws Exception{
+		ModelAndView mv = new ModelAndView();
+		pagination.setPerPage(5L);
+		List<BoardVO> ar = noticeService.getList(pagination);
+		
+		mv.addObject("list", ar);
+		mv.setViewName("student/homeNotice");
+		return mv;
+	}
+	
+	
+	
+	//홈 중요 공지사항 목록
+	@GetMapping("homeImportant")
+	public ModelAndView getHomeImportantList(NoticeVO noticeVO, HttpSession session) throws Exception{
+		ModelAndView mv = new ModelAndView();
+		noticeVO.setImportant(1L);
+		List<BoardVO> ar = noticeService.getImportantList(noticeVO);
+		mv.addObject("list", ar);
+		mv.setViewName("professor/homeImportant");
+		return mv;
+	}
+
