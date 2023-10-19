@@ -2,6 +2,7 @@
       <div class="card-title">
           <label class="mx-2">수강 연도</label>
             <select  class="select2" name="year" style="width:115px;" id="year" >
+                  //파라미터로 받아온 년도를 비교하여 출력
               <option value="${year}" ${param.year == year ? 'selected' : ''}>${year}</option>
               <option value="${year - 1}" ${param.year == year - 1 ? 'selected' : ''}>${year - 1}</option>
               <option value="${year - 2}" ${param.year == year - 2 ? 'selected' : ''}>${year - 2}</option>
