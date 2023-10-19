@@ -7,34 +7,42 @@
 	** Service 
 	//계정 생성
 	public int setStudentAdd(StudentVO studentVO, MemberVO memberVO, MemberSeqVO memberSeqVO) throws Exception {
+		//비밀번호 암호화
 		memberVO.setPassword(passwordEncoder.encode(memberVO.getPassword()));
 		
 		int result;
 		String year;
+		// 년도 시퀀스 테이블이 없으면 생성 
 		 if(administratorDAO.getYearSeq(memberSeqVO) == null) {
 			 result =  administratorDAO.setInsertSeq(memberSeqVO);
 			 year=  administratorDAO.getYearSeq(memberSeqVO).toString();
 			 Long memberSeq = administratorDAO.getMemberSeq(memberSeqVO);
 			 String username;
-			 
+			 // 뒷자리 4자리에 한자리수면 0 3개 붙이기
 			 if(memberSeq < 10) {
 				  username = year + "000" + memberSeq;
+			// 두 자리 수면 0 2개 붙이기
 			  }else if(memberSeq < 100) {
 				  username = year + "00" + memberSeq;
+			// 세 자리 수면 0 1개 붙이기
 			  }else if(memberSeq < 1000) {
 				  username = year + "0" + memberSeq;
+			// 네 자리 수면 0 붙이지 않기
 			  }else {
 				  username = year + memberSeq;
 			  }
-			  
+
 			memberVO.setUsername(username);
-			
+
+			//멤버 테이블에 값 저장
 			result = administratorDAO.setMemberAdd(memberVO);
 			
 			studentVO.setUsername(memberVO.getUsername());
-		
+
+			//학생 테이블에도 값 저장 
 			result = administratorDAO.setStudentAdd(studentVO);
-			
+
+			//Map으로 username과 roleNum 보내기 
 			Map<String, Object> map = new HashMap<>();
 			map.put("username", memberVO.getUsername());
 			
@@ -55,11 +63,11 @@
 			 
 			 
 		 }else {
+			//년도 시퀀스 테이블이 존재한다면 업데이트
 			  year = administratorDAO.getYearSeq(memberSeqVO).toString(); 
 			  result = administratorDAO.setUpdateSeq(memberSeqVO);
 			  Long memberSeq = administratorDAO.getMemberSeq(memberSeqVO);
 			  String username;
-			  
 			  
 			  
 			  if(memberSeq < 10) {
