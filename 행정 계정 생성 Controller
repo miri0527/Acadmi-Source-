@@ -17,33 +17,33 @@
 		
 	}
 
-@PostMapping("studentAdd")
-	public ModelAndView setStudentAdd(@Valid StudentVO studentVO, BindingResult bindingResult, MemberVO memberVO, MemberSeqVO memberSeqVO) throws Exception{
-		ModelAndView mv = new ModelAndView();
-//			List<FieldError> e= bindingResult.getFieldErrors();
-//			for(FieldError fieldError:e) {
-//				log.error("Error : {}", fieldError);
-//			}
-		
-			if(bindingResult.hasErrors()) {
-				log.warn("검중에 실패");
-				mv.setViewName("administrator/studentAdd");
-				return mv;
-			}
+	@PostMapping("studentAdd")
+		public ModelAndView setStudentAdd(@Valid StudentVO studentVO, BindingResult bindingResult, MemberVO memberVO, MemberSeqVO memberSeqVO) throws Exception{
+			ModelAndView mv = new ModelAndView();
+	//			List<FieldError> e= bindingResult.getFieldErrors();
+	//			for(FieldError fieldError:e) {
+	//				log.error("Error : {}", fieldError);
+	//			}
 			
-			int result = administratorService.setStudentAdd(studentVO,memberVO, memberSeqVO);
-			
-			String message="등록 실패";
-			
-			if(result > 0) {
-				message = "등록 되었습니다";
+				if(bindingResult.hasErrors()) {
+					log.warn("검중에 실패");
+					mv.setViewName("administrator/studentAdd");
+					return mv;
+				}
 				
-			}
+				int result = administratorService.setStudentAdd(studentVO,memberVO, memberSeqVO);
+				
+				String message="등록 실패";
+				
+				if(result > 0) {
+					message = "등록 되었습니다";
+					
+				}
+				
+				mv.addObject("result", message);
+				mv.setViewName("common/result");
+				
+				mv.addObject("url", "./studentList");
+				return mv;
 			
-			mv.addObject("result", message);
-			mv.setViewName("common/result");
-			
-			mv.addObject("url", "./studentList");
-			return mv;
-		
-	}
+		}
